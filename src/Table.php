@@ -19,7 +19,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Miloske85\php_cli_color;
+namespace Miloske85\php_cli_table;
 
 /**
  * Genarates formatted tables for CLI output
