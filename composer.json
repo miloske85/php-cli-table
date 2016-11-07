@@ -15,7 +15,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Miloske85\\php-cli-table\\": "src"
+            "Miloske85\\php_cli_table\\": "src"
         }
     }
 }
