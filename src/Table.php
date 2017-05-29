@@ -64,17 +64,26 @@ class Table {
 
     /**
      *
-     * @param array $header Table header
-     * @param array $data Array of arrays
+     * @param array $data Array of arrays or objects
+     * @param array $header Table header [optional]
+     * 
+     * Table expects $data to be either array of objects or array of arrays. In 
+     * case array of numerically indexed arrays is used, header array must be
+     * passed, because the script has no way to generate table header. $header
+     * can also be used for passing custom table headers.
      */
-    public function __construct($header, $data){
-        $this->header = $header;
+    public function __construct($data, $header = null){
+        
         $this->data = $data;
+        
+        $header ? $this->header = $header : $this->header = null;
 
+        $header? $this->columns = count($header) : $this->columns = null;
+        
+        $this->prepareData();
+        
         $this->verifyHeader();
-
-        $this->columns = count($header);
-
+      
         $this->verifyData();
 
         $this->getLengths();
@@ -91,7 +100,59 @@ class Table {
     public function getTable(){
         return $this->table;
     }
+    
+    //==========================================================================
+    // Private methods
+    //==========================================================================
 
+    private function prepareData(){
+        if(!is_array($this->data)){
+            throw new \Exception('Data passed must be an array');
+        }
+        
+        if(is_object($this->data[0])){
+            $this->generateHeaderFromData();
+            $this->convertObjectToArray();
+        }
+        elseif(is_array($this->data[0])){
+            $this->generateHeaderFromData();
+        }
+        else{
+            throw new \Exception('Passed data must be array of objects or arrays');
+        }
+    }
+    
+    private function convertObjectToArray(){
+        $temp = array();
+        
+        foreach($this->data as $obj){
+            $arr = array();
+            
+            foreach($obj as $item){
+                $arr[] = $item;
+            }
+            
+            $temp[] = $arr;
+        }
+        
+        $this->data = $temp;
+    }
+    
+    private function generateHeaderFromData(){
+        //do not overwrite
+        if(!$this->header){
+            $temp = array();
+
+            foreach($this->data[0] as $key => $item){
+                $temp[] = $key;
+            }
+
+            $this->header = $temp;
+
+            $this->columns = count($temp);
+        }
+    }
+    
     private function generateHeader(){
 
         $table = '';
@@ -197,5 +258,5 @@ class Table {
             throw new \Exception('Array length mismatch between table header and the data');
         }
     }
-
+    
 }
