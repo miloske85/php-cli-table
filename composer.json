@@ -2,7 +2,7 @@
     "name": "miloske85/php-cli-table",
     "description": "Makes tables in CLI output",
     "homepage": "https://github.com/miloske85/php-cli-table",
-    "license": "GPL3",
+    "license": "GPL-3.0-or-later",
     "authors": [
         {
             "name": "Milos Milutinovic",
