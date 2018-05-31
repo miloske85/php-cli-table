@@ -217,17 +217,16 @@ class Table
      */
     private function getLengths()
     {
-        for ($i = 0; $i < $this->columns; $i++) {
-            $this->maxLength[$i] = 0;
-
-            //headers
-            foreach ($this->header as $field) {
-
-                //set initial max lengths to the length of each header cell
-                if (mb_strlen($field) > $this->maxLength[$i]) {
-                    $this->maxLength[$i] = mb_strlen($field);
-                }
+        //headers
+        $i = 0;
+        foreach ($this->header as $field) {
+            //set initial max lengths to the length of each header cell
+            if (!isset($this->maxLength[$i])) {
+                $this->maxLength[$i] = mb_strlen($field);
+            } elseif (mb_strlen($field) > $this->maxLength[$i]) {
+                $this->maxLength[$i] = mb_strlen($field);
             }
+            ++$i;
         }
 
         //data
@@ -238,7 +237,7 @@ class Table
                 if (mb_strlen($field) > $this->maxLength[$i]) {
                     $this->maxLength[$i] = mb_strlen($field);
                 }
-                $i++;
+                ++$i;
             }
         }
     }
